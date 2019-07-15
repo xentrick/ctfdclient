@@ -9,8 +9,10 @@ wrong on the client side. Both of these classes extend :class:`.CTFException`.
 
 from .const import RESPONSE_CODES
 
+
 class CTFException(Exception):
     """ The base CTFd API Exception that all other exception classes extend. """
+
 
 class APIException(CTFException):
     """ Indicates exception that involves responses from CTFd API. """
@@ -22,12 +24,13 @@ class APIException(CTFException):
         """
         # Super
         if http_code == 400:
-            err_msg = '{}: {}'.format(http_code, http_response)
+            err_msg = "{}: {}".format(http_code, http_response)
         else:
-            err_msg = '{}: {}'.format(http_code, RESPONSE_CODES[str(http_code)])
+            err_msg = "{}: {}".format(http_code, RESPONSE_CODES[str(http_code)])
         super().__init__(err_msg)
         self.http_code = http_code
         self.message = err_msg
+
 
 class ClientException(CTFException):
     """ Indicates exception that involves an error on the client side. """

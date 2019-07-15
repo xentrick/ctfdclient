@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
 
 import logging
+
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
-from urllib.parse import urlparse
-import requests
+from urllib.parse import urlparse, urljoin
+import requests as _requests
+from pprint import pprint
 
 from .exceptions import APIException, ClientException
+from .const import COOKIE_PREFIX
+
+# Temporary
+_requests.packages.urllib3.disable_warnings()
+
 
 class Client(object):
-
     def __init__(self, url, user, pw, debug=False):
+        log.info("Initializing ctfdclient")
 
         self._authed = False
 
         # Debug
         if debug:
-            log.setLogLevel(log.DEBUG)
+            log.setLevel(logging.DEBUG)
 
         # Verify URL
-        log.debug("Verifying CTFd URL: {}".format(url))
-        self.url = urlparse(url)
-        if self.url.scheme is None or self.url.netloc is None:
-            raise APIException("Incorrect CTFd URL.")
+        log.debug("CTFd Location: {}".format(url))
+        self.url = url
 
         self.user = user
         self.pw = pw
@@ -30,35 +36,50 @@ class Client(object):
         log.debug("Password: {}".format(self.pw))
 
         # Session Setup
-        self.session = requests.Session()
+        self.session = _requests.Session()
         self.session.verify = False
+
+        # Login and get cookie
+        self.login()
 
     """
     Networking
     """
 
-    def _request(self, path, method="GET", headers=None, **kwargs):
+    def _request(self, uri="/", method="GET", headers=None, **kwargs):
         """ Base function to make requests to CTFd REST API """
-        url = urljoin(self.url, path)
-        self.log.debug("Method: %s URL: %s", method, url)
-        return self._check_error(self.session.request(method=method, url, **kwargs))
+        url = urljoin(self.url, uri)
+        log.debug("{} {}".format(method, url))
+        # params = **kwargs
+        return self._check_error(self.session.request(method, url, **kwargs))
 
     def _check_error(self, resp):
-        self.log.debug("Status Code: %s", resp.status_code)
-        self.log.debug("JSON:\n%s", resp.json())
-        return resp.json()
+        log.debug("Status Code: %s", resp.status_code)
+        return resp
 
-    def get(self):
-        return
+    def get(self, uri):
+        return self._request(uri, method="GET")
 
-    def post(self):
-        return
+    def post(self, uri, **kwargs):
+        return self._request(uri, method="POST", **kwargs)
 
     def delete(self):
-        return
+        return self._request(uri, method="DELETE", **kwargs)
 
     def put(self):
-        return
+        return self._request(uri, method="PUT", **kwargs)
+
+    """
+    Utility
+    """
+
+    def login(self):
+        log.info("Attempting login...")
+        resp = self.get(self.url)
+        if not (resp.cookies.get(COOKIE_PREFIX)):
+            raise ClientException("Error getting valid session with CTFd. No cookie found")
+        self._authed = True
+        log.debug("Cookie Received: {}: {}".format(COOKIE_PREFIX, resp.cookies.get(COOKIE_PREFIX)))
 
     """
     Properties
@@ -69,7 +90,9 @@ class Client(object):
         """ Returns true if authententication was successful """
         return self._authed
 
+    def cookie(self):
+        return self.session.cookies.get(COOKIE_PREFIX)
+
     def version(self):
         """ Returns version of CTFd being queried. """
         return self._version
-

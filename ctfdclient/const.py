@@ -4,6 +4,10 @@
 
 __version__ = "0.1"
 
+# Cookie Name
+
+COOKIE_PREFIX = "__cfduid"
+
 # API Base
 
 PREFIX = "/api/v1"

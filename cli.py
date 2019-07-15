@@ -3,4 +3,4 @@
 import ctfdclient
 
 
-test = ctfdclient.Client("test", "user", "pass")
+test = ctfdclient.Client("https://demo.ctfd.io", "admin", "admin", debug=True)
