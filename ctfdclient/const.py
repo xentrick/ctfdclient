@@ -10,29 +10,30 @@ COOKIE_PREFIX = "__cfduid"
 
 # API Base
 
-PREFIX = "/api/v1"
+API_PREFIX = "/api/v1/"
 
 # API Paths
 
-PATH = {}
 
-ROUTES = {
-    "challenges": "/challenges",
-    "tags": "/tags",
-    "awards": "/awards",
-    "hints": "/hints",
-    "flags": "/flags",
-    "submissions": "/submissions",
-    "scoreboard": "/scoreboard",
-    "teams": "/teams",
-    "users": "/users",
-    "statistics": "/statistics",
-    "files": "/files",
-    "notifications": "/notifications",
-    "configs": "/configs",
-    "pages": "/pages",
-    "unlocks": "/unlocks",
-}
+API_ROUTES = [
+    "challenges",
+    "tags",
+    "awards",
+    "hints",
+    "flags",
+    "submissions",
+    "scoreboard",
+    "teams",
+    "users",
+    "statistics",
+    "files",
+    "notifications",
+    "configs",
+    "pages",
+    "unlocks",
+]
+
+API_PATH = API_ROUTES
 
 RESPONSE_CODES = {
     "200": "OK",

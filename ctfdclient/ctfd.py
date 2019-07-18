@@ -10,13 +10,14 @@ import requests as _requests
 from pprint import pprint
 
 from .exceptions import APIException, ClientException
-from .const import COOKIE_PREFIX
+from .const import COOKIE_PREFIX, API_PREFIX
+from . import models
 
 # Temporary
 _requests.packages.urllib3.disable_warnings()
 
 
-class Client(object):
+class CTFd:
     def __init__(self, url, user, pw, debug=False):
         log.info("Initializing ctfdclient")
 
@@ -27,13 +28,17 @@ class Client(object):
             log.setLevel(logging.DEBUG)
 
         # Verify URL
-        log.debug("CTFd Location: {}".format(url))
-        self.url = url
+        self.domain = url
+        self.api = urljoin(self.domain, API_PREFIX)
+        log.debug("CTFd API: {}".format(self.api))
 
         self.user = user
         self.pw = pw
         log.debug("Username: {}".format(self.user))
         log.debug("Password: {}".format(self.pw))
+
+        # Models
+        self.scoreboard = models.Scoreboard(self, None)
 
         # Session Setup
         self.session = _requests.Session()
@@ -46,28 +51,32 @@ class Client(object):
     Networking
     """
 
-    def _request(self, uri="/", method="GET", headers=None, **kwargs):
+    def _request(self, method, url, headers=None, **kwargs):
         """ Base function to make requests to CTFd REST API """
-        url = urljoin(self.url, uri)
         log.debug("{} {}".format(method, url))
-        # params = **kwargs
         return self._check_error(self.session.request(method, url, **kwargs))
+
+    def _api_request(self, method, uri, headers=None, **kwargs):
+        """ Base function to make requests to CTFd REST API """
+        url = urljoin(self.api, uri)
+        log.debug("API Request: {} {}".format(method, url))
+        return self._request(method, url, headers, **kwargs).json()
 
     def _check_error(self, resp):
         log.debug("Status Code: %s", resp.status_code)
         return resp
 
     def get(self, uri):
-        return self._request(uri, method="GET")
+        return self._api_request("GET", uri)
 
     def post(self, uri, **kwargs):
-        return self._request(uri, method="POST", **kwargs)
+        return self._api_request("POST", uri, **kwargs)
 
     def delete(self):
-        return self._request(uri, method="DELETE", **kwargs)
+        return self._api_request("DELETE", uri, **kwargs)
 
     def put(self):
-        return self._request(uri, method="PUT", **kwargs)
+        return self._api_request("PUT", uri, **kwargs)
 
     """
     Utility
@@ -75,11 +84,17 @@ class Client(object):
 
     def login(self):
         log.info("Attempting login...")
-        resp = self.get(self.url)
+        resp = self._request("GET", self.domain)
         if not (resp.cookies.get(COOKIE_PREFIX)):
-            raise ClientException("Error getting valid session with CTFd. No cookie found")
+            raise ClientException(
+                "Error getting valid session with CTFd. No cookie found"
+            )
         self._authed = True
-        log.debug("Cookie Received: {}: {}".format(COOKIE_PREFIX, resp.cookies.get(COOKIE_PREFIX)))
+        log.debug(
+            "Cookie Received: {}: {}".format(
+                COOKIE_PREFIX, resp.cookies.get(COOKIE_PREFIX)
+            )
+        )
 
     """
     Properties
@@ -88,6 +103,11 @@ class Client(object):
     @property
     def authenticated(self):
         """ Returns true if authententication was successful """
+        if self.cookie:
+            self._authed = True
+        else:
+            self._authed = False
+
         return self._authed
 
     def cookie(self):
