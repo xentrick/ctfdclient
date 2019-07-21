@@ -1,11 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from pprint import pprint
 from ctfdclient import CTFd
+from ctfdclient.const import API_PREFIX
 from urllib.parse import urljoin
 
 
-ctfd = CTFd("https://demo.ctfd.io", "admin", "admin", debug=True)
+#ctfd = CTFd("https://demo.ctfd.io", "admin", "admin", debug=True)
+ctfd = CTFd("http://178.79.132.144:4000", "autopwn", "topwntheeornottopwnthee", debug=True)
+
 score = ctfd.scoreboard.update()
 print("====================================================================")
 pprint(ctfd.scoreboard)
@@ -23,7 +26,7 @@ for team in ctfd.scoreboard:
 ctfd.scoreboard._reset()
 print(ctfd.scoreboard.__dict__)
 
-print(ctfd.scoreboard["Art117"])
+#print(ctfd.scoreboard["Art117"])
 
 
 for t in ctfd.scoreboard:
