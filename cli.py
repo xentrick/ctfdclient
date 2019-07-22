@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from time import sleep
 from pprint import pprint
 from ctfdclient import CTFd
 from ctfdclient.const import API_PREFIX
@@ -105,8 +106,10 @@ ctfd = CTFd("http://178.79.132.144:4000", "autopwn", "topwntheeornottopwnthee", 
 #pprint(ctfd.players.__dict__)
 #pprint(ctfd.submissions.__dict__)
 
+# Check challenge
+pprint(ctfd.challenges.get(15))
 # Test award for submission
-teamId = 3
 userId = 12
-chall = 10
-ctfd.submissions.give(teamId, userId, chall)
+teamId = 3
+chall = 15
+ctfd.submissions.give(userId, teamId, chall)

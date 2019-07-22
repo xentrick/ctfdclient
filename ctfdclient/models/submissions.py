@@ -34,13 +34,20 @@ class Submissions(CTFBase):
 
     def give(self, userId, teamId, challengeId):
         params = {
-            "provided": "Autopwn",
+            "provided": "MARKED AS SOLVED BY ADMIN",
             "user_id": userId,
             "team_id": teamId,
-            "challenge_id": challengeId,
+            "challenge_id": str(challengeId),
             "type": "correct",
         }
-        headers = {"Accept": "application/json", "Content-Type": "application/json"}
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Connection": "keep-alive",
+            "User-Agent": "autopwn",
+            "Accept-Language": "en-US,en;q=0.5",
+            "CSRF-Token": self._ctfd.nonce
+        }
         resp = self._ctfd.post("submissions", data=json.dumps(params), headers=headers)
         pprint(resp)
 
