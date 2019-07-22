@@ -1,8 +1,9 @@
 """Provide the `CTFBase` superclass."""
 from copy import deepcopy
 
-import logging
+from ..const import API_ROUTES
 
+import logging
 log = logging.getLogger(__name__)
 
 
@@ -36,15 +37,7 @@ class CTFBase:
         self._ctfd = ctfd
         if _data:
             for cls in _data:
-                setattr(self, cls.name, cls)
-
-    # def __getattr__(self, attr):
-    #     """Return the value of `attribute`."""
-    #     log.debug("__getattr__: {}".format(attr))
-    #     if not attr.startswith("_"):
-    #         return getattr(self, attr)
-    #     raise Exception()
-    #     return None
+                setattr(self, str(cls.id), cls)
 
     def __getitem__(self, attr):
         """Return the value of `attribute`."""
@@ -54,6 +47,11 @@ class CTFBase:
         return None
 
     def _reset(self, *attrs):
-        for a in attrs:
-            if a in self.__dict__:
+        for a in deepcopy(self.__dict__):
+            if a != "_ctfd" and a not in API_ROUTES:
                 del self.__dict__[a]
+
+    # def _reset(self, *attrs):
+    #     for a in attrs:
+    #         if a in self.__dict__:
+    #             del self.__dict__[a]

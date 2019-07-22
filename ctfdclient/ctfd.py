@@ -19,10 +19,14 @@ _requests.packages.urllib3.disable_warnings()
 
 
 class CTFd:
-    def __init__(self, url, user, pw, debug=False):
+    def __init__(self, url, user, pw, debug=False, **kwargs):
         log.info("Initializing ctfdclient")
 
-        self.authed = False
+        if kwargs.get("demo"):
+            log.info("Setting up for demo CTFd instance.")
+            self.authed = True
+        else:
+            self.authed = False
 
         # Debug
         if debug:
@@ -47,6 +51,10 @@ class CTFd:
 
         # Models
         self.scoreboard = models.Scoreboard(self, None)
+        self.challenges = models.Challenges(self, None)
+        self.teams = models.Teams(self, None)
+        self.players = models.Players(self, None)
+        self.submissions = models.Submissions(self, None)
 
     """
     Networking
@@ -70,8 +78,8 @@ class CTFd:
     def get(self, uri):
         return self._api_request("GET", uri)
 
-    def post(self, uri, body):
-        return self._api_request("POST", uri, data=body)
+    def post(self, uri, body, **kwargs):
+        return self._api_request("POST", uri, data=body, **kwargs)
 
     def delete(self):
         return self._api_request("DELETE", uri, **kwargs)
@@ -89,7 +97,7 @@ class CTFd:
         loginUrl = urljoin(self.domain, "login")
         resp = self._request("POST", loginUrl, data=loginParams, allow_redirects=True)
         for r in resp.history:
-            pprint(r.headers)
+            log.debug("Login Response: {}".format(r.headers))
             if 'Set-Cookie' in r.headers:
                 self.authed = True
                 log.debug("Cookie Received: {}".format(r.headers['Set-Cookie']))

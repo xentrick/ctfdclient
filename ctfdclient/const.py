@@ -14,7 +14,6 @@ API_PREFIX = "/api/v1/"
 
 # API Paths
 
-
 API_ROUTES = [
     "challenges",
     "tags",
@@ -34,6 +33,16 @@ API_ROUTES = [
 ]
 
 API_PATH = API_ROUTES
+
+# Specialized
+
+CHAL_URI = "challenges/{}"
+TEAM_URI = "teams/{}"
+PLAYERS_URI = "users/{}"
+SUBMISSION_URI = "submissions/{}"
+
+
+# HTTP
 
 RESPONSE_CODES = {
     "200": "OK",
