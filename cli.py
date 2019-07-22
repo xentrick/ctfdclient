@@ -97,7 +97,7 @@ ctfd = CTFd("http://178.79.132.144:4000", "autopwn", "topwntheeornottopwnthee", 
 # getChalls()
 # getTeams()
 # getPlayers()
-getSub()
+# getSub()
 
 #pprint(ctfd.scoreboard.__dict__)
 #pprint(ctfd.challenges.__dict__)

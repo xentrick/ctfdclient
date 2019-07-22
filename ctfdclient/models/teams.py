@@ -7,10 +7,11 @@ from ..const import TEAM_URI
 from pprint import pprint
 
 import logging
+
 log = logging.getLogger(__name__)
 
-class Teams(CTFBase):
 
+class Teams(CTFBase):
     def update(self):
         log.debug("Retrieving teams...")
         for i in self._ctfd.get("teams")["data"]:
@@ -25,7 +26,7 @@ class Teams(CTFBase):
     def get(self, ident):
         if not isinstance(ident, int):
             raise TypeError("Team ID has to be an integer")
-        info = self._ctfd.get(TEAM_URI.format(ident))['data']
+        info = self._ctfd.get(TEAM_URI.format(ident))["data"]
         if not info:
             return Exception("Team ID does not exist")
         return info

@@ -7,13 +7,13 @@ from .players import Player
 
 
 import logging
+
 log = logging.getLogger(__name__)
 
 from pprint import pprint
 
 
 class Team:
-
     def __init__(self, _data=None):
 
         self._data = _data

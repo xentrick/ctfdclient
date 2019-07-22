@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class Challenge:
     def __init__(self, _data):
         self._data = _data
@@ -51,7 +52,7 @@ class Challenge:
     def script(self, script):
         if not isinstance(script, str):
             raise Exception("Script must be a string")
-        self._script = script 
+        self._script = script
 
     @property
     def tags(self):
@@ -81,7 +82,7 @@ class Challenge:
     def type(self, type):
         if not isinstance(type, str):
             raise Exception("Type must be a string")
-        self._type = type 
+        self._type = type
 
     @property
     def value(self):

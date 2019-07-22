@@ -78,8 +78,8 @@ class CTFd:
     def get(self, uri):
         return self._api_request("GET", uri)
 
-    def post(self, uri, body, **kwargs):
-        return self._api_request("POST", uri, data=body, **kwargs)
+    def post(self, uri, **kwargs):
+        return self._api_request("POST", uri, **kwargs)
 
     def delete(self):
         return self._api_request("DELETE", uri, **kwargs)
@@ -98,9 +98,9 @@ class CTFd:
         resp = self._request("POST", loginUrl, data=loginParams, allow_redirects=True)
         for r in resp.history:
             log.debug("Login Response: {}".format(r.headers))
-            if 'Set-Cookie' in r.headers:
+            if "Set-Cookie" in r.headers:
                 self.authed = True
-                log.debug("Cookie Received: {}".format(r.headers['Set-Cookie']))
+                log.debug("Cookie Received: {}".format(r.headers["Set-Cookie"]))
         if not self.authed:
             raise Exception("Error logging into CTFd")
 
@@ -108,9 +108,9 @@ class CTFd:
     def nonce(self):
         log.info("Retreiving nonce for login.")
         resp = self._request("GET", urljoin(self.domain, "login"))
-        soup = BeautifulSoup(resp.text, 'lxml')
-        #self._nonce = soup.find('input')
-        self._nonce = soup.find(attrs={"name": "nonce"})['value']
+        soup = BeautifulSoup(resp.text, "lxml")
+        # self._nonce = soup.find('input')
+        self._nonce = soup.find(attrs={"name": "nonce"})["value"]
         return self._nonce
 
     """

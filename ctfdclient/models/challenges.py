@@ -7,10 +7,11 @@ from ..const import CHAL_URI
 from pprint import pprint
 
 import logging
+
 log = logging.getLogger(__name__)
 
-class Challenges(CTFBase):
 
+class Challenges(CTFBase):
     def update(self):
         log.debug("Retrieving challenges...")
         self._reset()
@@ -26,7 +27,7 @@ class Challenges(CTFBase):
     def get(self, challId):
         if not isinstance(challId, int):
             raise TypeError("Challenge ID has to be an integer")
-        info = self._ctfd.get(CHAL_URI.format(challId))['data']
+        info = self._ctfd.get(CHAL_URI.format(challId))["data"]
         if not info:
             return Exception("Challenge ID does not exist")
         return info
@@ -39,4 +40,3 @@ class Challenges(CTFBase):
     def __iter__(self):
         for x in self.challenges:
             yield x
-

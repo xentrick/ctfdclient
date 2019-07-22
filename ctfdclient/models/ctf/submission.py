@@ -6,13 +6,13 @@ import socket
 from .base import InfoBase
 
 import logging
+
 log = logging.getLogger(__name__)
 
 from pprint import pprint
 
 
 class Submission:
-
     def __init__(self, _data=None):
 
         self._data = _data

@@ -1,5 +1,6 @@
 from .base import CTFBase
 from .ctf import Team
+
 # from .. import CTFd
 # from ..exceptions import APIException, ClientException
 # from urllib.parse import urljoin

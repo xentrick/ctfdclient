@@ -7,10 +7,11 @@ from ..const import PLAYERS_URI
 from pprint import pprint
 
 import logging
+
 log = logging.getLogger(__name__)
 
-class Players(CTFBase):
 
+class Players(CTFBase):
     def update(self):
         log.debug("Retrieving players...")
         for i in self._ctfd.get("users")["data"]:
@@ -25,7 +26,7 @@ class Players(CTFBase):
     def get(self, ident):
         if not isinstance(ident, int):
             raise TypeError("Player ID has to be an integer")
-        info = self._ctfd.get(PLAYERS_URI.format(ident))['data']
+        info = self._ctfd.get(PLAYERS_URI.format(ident))["data"]
         if not info:
             return Exception("Player ID does not exist")
         return info
