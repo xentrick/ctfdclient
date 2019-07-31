@@ -16,7 +16,6 @@ class Submission:
     def __init__(self, _data=None):
 
         self._data = _data
-        pprint(_data)
 
         self.challenge = self._data["challenge"]
         self.challenge_id = self._data["challenge_id"]

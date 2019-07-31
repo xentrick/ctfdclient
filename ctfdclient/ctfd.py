@@ -106,7 +106,7 @@ class CTFd:
 
     @property
     def nonce(self):
-        log.info("Retreiving nonce for login.")
+        log.debug("Retreiving nonce for login.")
         resp = self._request("GET", urljoin(self.domain, "login"))
         soup = BeautifulSoup(resp.text, "lxml")
         # self._nonce = soup.find('input')

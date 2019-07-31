@@ -5,7 +5,6 @@ from pprint import pprint
 
 class Player:
     def __init__(self, _data):
-        pprint(_data)
         self._data = _data
 
         self.affiliation = self._data["affiliation"]

@@ -49,7 +49,10 @@ class Submissions(CTFBase):
             "CSRF-Token": self._ctfd.nonce,
         }
         resp = self._ctfd.post("submissions", data=json.dumps(params), headers=headers)
-        pprint(resp)
+        if "message" in resp.keys():
+            log.debug(f"RESPONSE: {resp}")
+            return False
+        return True
 
     def __init__(self, ctfd, _data=None):
         self._ctfd = ctfd

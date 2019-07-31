@@ -65,7 +65,7 @@ def getChalls():
         ====================================================================""")
     print("Testing retrieval of challenge 1")
     pprint(ctfd.challenges.get(1))
-    
+
 
 def getScores():
     score = ctfd.scoreboard.update()
@@ -92,12 +92,12 @@ def getScores():
     #         print("====================================================================")
 
 #ctfd = CTFd("https://demo.ctfd.io", "admin", "admin", debug=True, demo=True)
-ctfd = CTFd("http://178.79.132.144:4000", "autopwn", "topwntheeornottopwnthee", debug=True)
+ctfd = CTFd("http://172.16.1.10:4000", "autopwn", "1234", debug=True)
 
 #getScores()
 # getChalls()
-# getTeams()
-# getPlayers()
+#getTeams()
+getPlayers()
 # getSub()
 
 #pprint(ctfd.scoreboard.__dict__)
@@ -109,7 +109,7 @@ ctfd = CTFd("http://178.79.132.144:4000", "autopwn", "topwntheeornottopwnthee", 
 # Check challenge
 pprint(ctfd.challenges.get(15))
 # Test award for submission
-userId = 12
-teamId = 3
-chall = 15
+userId = 4
+teamId = 1
+chall = 27
 ctfd.submissions.give(userId, teamId, chall)
