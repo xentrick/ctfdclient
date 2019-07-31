@@ -46,7 +46,7 @@ class Submissions(CTFBase):
             "Connection": "keep-alive",
             "User-Agent": "autopwn",
             "Accept-Language": "en-US,en;q=0.5",
-            "CSRF-Token": self._ctfd.nonce
+            "CSRF-Token": self._ctfd.nonce,
         }
         resp = self._ctfd.post("submissions", data=json.dumps(params), headers=headers)
         pprint(resp)
